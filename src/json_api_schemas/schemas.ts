@@ -73,7 +73,7 @@ const LoginBodySchema = {
         username: { type: 'string', minLength: 4 },
         password: { type: 'string', minLength: 8 },
     },
-    required: ['username', 'password'],  // or ['username', 'password']
+    required: ['username', 'password']
 };
 
 // Responses
