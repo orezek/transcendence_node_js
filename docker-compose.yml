@@ -6,3 +6,31 @@ services:
       - 80:3000
     volumes:
       - ./auth_service:/app
+    networks:
+      - transcendence
+
+
+  auth-db-service:
+    build:
+      context: ./auth_service_db
+      dockerfile: Dockerfile
+    container_name: auth_service_db
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: auth_db
+    volumes:
+      - services_auth_db_data:/var/lib/postgresql/data # named volume
+    networks:
+      - transcendence
+
+networks:
+  transcendence:
+    driver: bridge
+
+volumes:
+  auth_db_data:
+  services_auth_db_data:
