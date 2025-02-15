@@ -1,5 +1,3 @@
-// Handlers file
-import os from 'os'
 
 import type {FastifyInstance, FastifyRequest, FastifyReply} from "fastify";
 
@@ -17,8 +15,6 @@ function createUser(this: FastifyInstance, request: FastifyRequest, reply: Fasti
             username: request.body.username,
             // @ts-ignore
             email: request.body.email,
-            // @ts-ignore
-            password: request.body.password,
         }
     };
 }

@@ -10,8 +10,6 @@ function createUser(request, reply) {
             username: request.body.username,
             // @ts-ignore
             email: request.body.email,
-            // @ts-ignore
-            password: request.body.password,
         }
     };
 }
