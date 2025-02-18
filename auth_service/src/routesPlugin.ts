@@ -1,7 +1,7 @@
 import {FastifyInstance, FastifyPluginAsync} from 'fastify';
+import createUser from './handlers/createUser.js'
 
 import {
-    createUser,
     loginUser,
     logoutUser,
     getUserInfo,
