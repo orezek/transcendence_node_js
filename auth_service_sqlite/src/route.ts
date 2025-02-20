@@ -1,9 +1,17 @@
-import sqliteHandler from './handler.js'
+import getUserHandler from './handlers/get_user.js';
+import createUserHandler from './handlers/create_user.js';
 
-const sqlite = {
-    path: '/',
+// @ts-ignore
+const getUser = {
+    url: '/',
     method: 'GET',
-    handler: sqliteHandler
+    handler: getUserHandler,
 }
 
-export default sqlite;
+const createUser = {
+    url: '/user',
+    method: 'POST',
+    handler: createUserHandler,
+}
+
+export {getUser, createUser};

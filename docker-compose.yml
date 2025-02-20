@@ -7,7 +7,7 @@ services:
     ports:
       - 80:3000
     volumes:
-      - ./auth_service:/app
+      - ./auth_service_sqlite/dist:/app/dist
       - sqlite_db_data:/sqlite_db_data
     networks:
       - transcendence
@@ -39,7 +39,7 @@ services:
     ports:
       - 81:3000
     volumes:
-      - ./auth_service_sqlite:/app
+      - ./auth_service_sqlite/dist:/app/dist
       - sqlite_db_data:/sqlite_db_data
     networks:
       - transcendence

@@ -1,8 +1,18 @@
 import fastify from 'fastify';
-import sqlite from './route.js';
+import { getUser, createUser } from './route.js';
+// @ts-ignore
+import sqlite from "fastify-sqlite-typed";
 const app = fastify({ logger: true });
 // @ts-ignore
-app.route(sqlite);
+app.register(sqlite, {
+    dbFilename: '/sqlite_db_data/auth_service.sqlite',
+    driverSettings: {
+        verbose: true,
+    }
+});
+// @ts-ignore
+app.route(getUser);
+app.route(createUser);
 app.ready().then(() => {
     console.log('Server is ready.');
 });
