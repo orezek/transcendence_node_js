@@ -1,12 +1,12 @@
 import fastify from 'fastify';
 import type {FastifyInstance} from 'fastify';
-import defaultRoute from './route.js';
+import sqlite from './route.js';
 
 
 const app: FastifyInstance = fastify({logger: true});
 
 // @ts-ignore
-app.route(defaultRoute);
+app.route(sqlite);
 
 app.ready().then(() => {
     console.log('Server is ready.');

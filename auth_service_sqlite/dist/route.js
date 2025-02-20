@@ -1,7 +1,7 @@
 import sqliteHandler from './handler.js';
-const defaultRoute = {
+const sqlite = {
     path: '/',
     method: 'GET',
     handler: sqliteHandler
 };
-export default defaultRoute;
+export default sqlite;
