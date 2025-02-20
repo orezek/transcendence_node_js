@@ -6,6 +6,7 @@ services:
       - 80:3000
     volumes:
       - ./auth_service:/app
+      - sqlite_db_data:/sqlite_db_data
     networks:
       - transcendence
 
@@ -27,10 +28,23 @@ services:
     networks:
       - transcendence
 
+
+  auth_service_sqlite:
+    build: ./auth_service_sqlite
+    container_name: auth_service_sqlite
+    ports:
+      - 81:3000
+    volumes:
+      - ./auth_service_sqlite:/app
+      - sqlite_db_data:/sqlite_db_data
+    networks:
+      - transcendence
 networks:
   transcendence:
     driver: bridge
 
 volumes:
-  auth_db_data:
+  # sqlite
+  sqlite_db_data:
+  # postgres
   services_auth_db_data:
