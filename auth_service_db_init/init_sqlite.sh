@@ -12,5 +12,8 @@ else
 fi
 
 # Run Flyway migrations
-echo "Running Flyway migrations..."
-flyway migrate -url=jdbc:sqlite:$DB_PATH -locations=filesystem:/flyway/sql
+echo "Running Flyway migrations for SQLite"
+flyway migrate -url=jdbc:sqlite:$DB_PATH -locations=filesystem:/flyway/sql/sqlite
+echo "Running Flyway migrations for Postgres"
+flyway migrate -url=jdbc:postgresql://auth_service_db:5432/auth_db -user=auth_user -password=securepassword -locations=filesystem:/flyway/sql/pg
+
