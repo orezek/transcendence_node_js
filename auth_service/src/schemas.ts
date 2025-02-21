@@ -70,7 +70,7 @@ const LoginBodySchema = {
     title: 'LoginRequest',
     type: 'object',
     properties: {
-        username: { type: 'string', minLength: 4 },
+        username: { type: 'string', minLength: 3 },
         password: { type: 'string', minLength: 8 },
     },
     required: ['username', 'password']

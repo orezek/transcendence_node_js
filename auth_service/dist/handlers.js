@@ -1,6 +1,6 @@
-function loginUser(request, reply) {
-    return { endpoint: 'loginUser' };
-}
+// function loginUser(request: FastifyRequest, reply: FastifyReply) {
+//     return {endpoint: 'loginUser'};
+// }
 function logoutUser(request, reply) {
     return { endpoint: 'logoutUser' };
 }
@@ -22,4 +22,4 @@ function deleteUser(request, reply) {
 function updateUser(request, reply) {
     return { endpoint: 'updateUser' };
 }
-export { loginUser, logoutUser, getUserInfo, refreshToken, logoutAll, getAllSessions, deleteUser, updateUser };
+export { logoutUser, getUserInfo, refreshToken, logoutAll, getAllSessions, deleteUser, updateUser };
