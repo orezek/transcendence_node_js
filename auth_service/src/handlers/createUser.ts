@@ -1,40 +1,41 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 
-interface UserRequest{
-    Body: {
+interface UserBody {
+    username: string;
+    email: string;
+    password: string;
+}
+
+interface UserResponse {
+    status: 'success' | 'error';
+    message: string;
+    data?: {
+        id: number;
         username: string;
         email: string;
-        password: string;
     };
+    conflict?: string;
 }
 
-function createUser(this: FastifyInstance, request: FastifyRequest<UserRequest>, reply: FastifyReply) {
-    reply.code(201);
-    const { username, email, password } = request.body;
-    const query: string = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email';
-    const values = [username, email, password];
-    // @ts-ignore
-    return this.pg.query(query, values).then((result) => {
-        console.log(result.rows);
-        return {
-            status: "success",
-            message: "user created successfully",
-            data: {
-                id: result.rows[0].id,
-                // @ts-ignore
-                username: result.rows[0].username,
-                // @ts-ignore
-                email: result.rows[0].email
-            }
+async function createUser(this: FastifyInstance, request: FastifyRequest<{Body: UserBody}>, reply: FastifyReply): Promise<UserResponse> {
+    try {
+        const {username, email, password} = request.body;
+        const [id] = await this.dbSqlite('users').insert({username, email, password});
+        reply.code(201);
+        return {status: 'success', message: 'User created successfully.', data: {id, username, email}
         };
-        // @ts-ignore
-    }).catch((err) => {
-        console.error('Error inserting user:', err);
-        reply.code(500);
-        return { error: 'Database error' };
-    })
+    } catch (error: unknown) {
+        const sqliteError = error as { code?: string; message: string };
+        if (sqliteError.code === 'SQLITE_CONSTRAINT') {
+            reply.code(409);
+            return {status: 'error', message: 'duplicate error', conflict: sqliteError.message};
+        }
+        else {
+            reply.code(400);
+            return {status: 'error', message: sqliteError.message};
+        }
+    }
+
 }
-
-
 
 export default createUser;

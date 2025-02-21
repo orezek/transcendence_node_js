@@ -1,5 +1,5 @@
 import {FastifyInstance, FastifyPluginAsync} from 'fastify';
-import createUser from './handlers/createUser.js'
+import createUser from '../handlers/createUser.js'
 
 import {
     loginUser,
@@ -9,7 +9,7 @@ import {
     logoutAll,
     getAllSessions,
     deleteUser,
-    updateUser } from './handlers.js'
+    updateUser } from '../handlers.js'
 
 const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
     const routes = [

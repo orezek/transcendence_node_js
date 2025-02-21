@@ -1,7 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 
 async function createUserKnexHandler(this:FastifyInstance, req: FastifyRequest, reply: FastifyReply) {
-    // Expecting JSON body with: { username, email, password }
 
     // @ts-ignore
     const { username, email, password } = req.body;

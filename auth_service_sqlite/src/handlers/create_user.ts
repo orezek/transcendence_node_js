@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
+import type {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 
 async function createUserHandler(this:FastifyInstance, req: FastifyRequest, reply: FastifyReply) {
     try {
