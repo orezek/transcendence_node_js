@@ -108,6 +108,18 @@ const LoginUnauthorized401Response = {
     required: ['status', 'message'],
 };
 
+const LoginServerError500Response = {
+    $id: 'https://ponggame.com/schemas/api/v1/login/response-500.json',
+    $schema: 'http://json-schema.org/draft-07/schema#',
+    title: 'LoginServerError500Response',
+    type: 'object',
+    properties: {
+        status: { type: 'string', enum: ['error'] },
+        message: { type: 'string' },
+    },
+    required: ['status', 'message'],
+};
+
 // Request to POST /api/logout
 // jwt required in header
 
@@ -379,6 +391,7 @@ export default {
     LoginBodySchema,
     LoginSuccess200Response,
     LoginUnauthorized401Response,
+    LoginServerError500Response,
     LogoutSuccess200Response,
     LogoutUnauthorized401Response,
     UserInfoSuccess200Response,

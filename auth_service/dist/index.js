@@ -5,6 +5,13 @@ import knexPlugin from "./plugins/knexPlugin.js";
 import routesPlugin from "./plugins/routesPlugin.js";
 import schemas from "./schemas.js";
 const app = Fastify();
+// Register JWT plugin with configuration
+await app.register(import('@fastify/jwt'), {
+    secret: 'my-super-secret-key', // Hardcoded for testing
+    sign: {
+        expiresIn: '1h' // Initial expiration: 1 hour
+    }
+});
 // @ts-ignore
 app.register(sqlite, {
     dbFilename: '/sqlite_db_data/auth_service.sqlite',

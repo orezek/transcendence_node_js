@@ -8,6 +8,13 @@ import schemas from "./schemas.js";
 
 const app: FastifyInstance = Fastify();
 
+// Register JWT plugin with configuration
+await app.register(import('@fastify/jwt'), {
+    secret: 'my-super-secret-key', // Hardcoded for testing
+    sign: {
+        expiresIn: '1h' // Initial expiration: 1 hour
+    }
+});
 
 // @ts-ignore
 app.register(sqlite, {

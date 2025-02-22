@@ -1,5 +1,19 @@
 import type {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 
+// Define response types
+interface SuccessResponse {
+    status: 'success';
+    message: string;
+    data: { token: string };
+}
+
+interface ErrorResponse {
+    status: 'error';
+    message: string;
+}
+
+type LoginResponse = SuccessResponse | ErrorResponse;
+
 
 interface UserBody {
     username: string;
@@ -16,22 +30,10 @@ interface User {
     active: boolean;
 }
 
-interface Session {
-    id: number;
-    user_id: number;
-    session_id: string;
-    ip_address: string;
-    user_agent: string;
-    created_at: Date;
-    expires_at: Date;
-    revoked: boolean;
-}
-
-async function loginUser(this: FastifyInstance, request: FastifyRequest<{Body: UserBody}>, reply: FastifyReply) {
+async function loginUser(this: FastifyInstance, request: FastifyRequest<{Body: UserBody}>, reply: FastifyReply): Promise<LoginResponse> {
     const {username, password} = request.body;
     try {
-        const user: User | undefined = await this.dbSqlite<User>('users').where({username: username, password: password}).first();
-        // user does not exist
+        const user: User | undefined = await this.dbSqlite<User>('users').select('*').where({username: username, password: password, active: true}).first();
         if (!user) {
             reply.code(401);
             return {status: 'error', message: 'Invalid username or password'};
@@ -39,19 +41,26 @@ async function loginUser(this: FastifyInstance, request: FastifyRequest<{Body: U
         const newSession =
             {
                 user_id: user.id,
-                session_id : 'some-session-id',
+                session_id : crypto.randomUUID(),
                 ip_address: request.ip || 'unknown',
                 user_agent: request.headers['user-agent'] || 'unknown',
+                expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
             }
-        const [sessionId]: number[] = await this.dbSqlite('sessions').insert(newSession);
-        const session: Session | undefined = await this.dbSqlite('sessions').where('id', sessionId).first();
-        reply.code(200);
-        // @ts-ignore
-        return {status: 'success', message: 'user logged in' ,data: session};
+        try {
+            await this.dbSqlite('sessions').insert(newSession);
+            const token: string = this.jwt.sign({ jti: newSession.session_id });
+            reply.code(200);
+            return {status: 'success', message: 'user logged in' ,data: {token: token}};
+        }catch (error) {
+            reply.code(500);
+            return {status: 'error', message: 'failed to create session'};
+        }
 
-    } catch (error) {
-        // @ts-ignore
-        return {error: error.message};
+
+    } catch (error: unknown) {
+        const sqliteError = error as { code?: string; message: string };
+        reply.code(500);
+        return {status: 'error', message: sqliteError.message};
     }
 }
 

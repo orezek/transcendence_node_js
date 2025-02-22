@@ -35,8 +35,9 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
             schema: {
                 body: app.getSchema('https://ponggame.com/schemas/api/v1/login/body.json'),
                 response: {
-                    //200: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-200.json'),
-                    401: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-401.json')
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-200.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-401.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-500.json'),
                 }
             }
         },
