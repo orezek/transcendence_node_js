@@ -1,5 +1,4 @@
 async function createUserKnexHandler(req, reply) {
-    // Expecting JSON body with: { username, email, password }
     // @ts-ignore
     const { username, email, password } = req.body;
     try {

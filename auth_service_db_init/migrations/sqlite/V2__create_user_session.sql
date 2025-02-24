@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS sessions (
     ip_address TEXT,
     user_agent TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP
+    expires_at TIMESTAMP,
     revoked BOOLEAN DEFAULT 0
     );

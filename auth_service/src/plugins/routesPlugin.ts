@@ -1,17 +1,16 @@
 import {FastifyInstance, FastifyPluginAsync} from 'fastify';
 import createUser from '../handlers/createUser.js'
 import loginUser from '../handlers/loginUser.js'
-
+import getAllSessions from '../handlers/getAllSessions.js'
 import {
     logoutUser,
     getUserInfo,
     refreshToken,
     logoutAll,
-    getAllSessions,
     deleteUser,
     updateUser } from '../handlers.js'
 
-const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
+const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<void> => {
     const routes = [
         {
             // create user
@@ -69,7 +68,15 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
             // list all users sessions
             url: '/api/sessions',
             method: 'get',
-            handler: getAllSessions
+            preHandler: app.authenticate,
+            handler: getAllSessions,
+            schema: {
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/response-200.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/response-401.json'),
+                }
+
+            }
         },
         {
             // deactivate user

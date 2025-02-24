@@ -1,10 +1,13 @@
 import Fastify from 'fastify';
+import fp from 'fastify-plugin';
 import fastifyPostgres from '@fastify/postgres';
 import sqlite from 'fastify-sqlite-typed';
 import knexPlugin from "./plugins/knexPlugin.js";
 import routesPlugin from "./plugins/routesPlugin.js";
 import schemas from "./schemas.js";
+import authPlugin from "./plugins/authPlugin.js";
 const app = Fastify();
+await app.register(authPlugin);
 // Register JWT plugin with configuration
 await app.register(import('@fastify/jwt'), {
     secret: 'my-super-secret-key', // Hardcoded for testing
@@ -24,7 +27,7 @@ await app.register(fastifyPostgres, {
 });
 // Look at the plugin options and maybe move the database connection settings to options to have direct access to it
 await app.register(knexPlugin);
-app.register(routesPlugin);
+app.register(fp(routesPlugin));
 Object.values(schemas).forEach((schema) => {
     app.addSchema(schema);
 });

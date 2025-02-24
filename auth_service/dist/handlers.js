@@ -1,6 +1,3 @@
-// function loginUser(request: FastifyRequest, reply: FastifyReply) {
-//     return {endpoint: 'loginUser'};
-// }
 function logoutUser(request, reply) {
     return { endpoint: 'logoutUser' };
 }
@@ -13,13 +10,13 @@ function refreshToken(request, reply) {
 function logoutAll(request, reply) {
     return { endpoint: 'logoutAll' };
 }
-function getAllSessions(request, reply) {
-    return { endpoint: 'getAllSessions' };
-}
+// function getAllSessions(request: FastifyRequest, reply: FastifyReply) {
+//     return {endpoint: 'getAllSessions'};
+// }
 function deleteUser(request, reply) {
     return { endpoint: 'deleteUser' };
 }
 function updateUser(request, reply) {
     return { endpoint: 'updateUser' };
 }
-export { logoutUser, getUserInfo, refreshToken, logoutAll, getAllSessions, deleteUser, updateUser };
+export { logoutUser, getUserInfo, refreshToken, logoutAll, deleteUser, updateUser };

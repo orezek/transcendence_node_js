@@ -257,11 +257,15 @@ const ListSessionsSuccess200Response = {
             items: {
                 type: 'object',
                 properties: {
-                    sessionId: { type: 'string' },
-                    createdAt: { type: 'string', format: 'date-time' },
-                    // ... any other session details
+                    session_id: { type: 'string' }, // Match DB column
+                    user_id: { type: 'integer' }, // Match DB column
+                    ip_address: { type: 'string' }, // Match DB column
+                    user_agent: { type: 'string' }, // Match DB column
+                    created_at: { type: 'string', format: 'date-time' }, // Match DB column
+                    expires_at: { type: 'string', format: 'date-time' }, // Match DB column
+                    revoked: { type: 'boolean' }, // Match DB column
                 },
-                required: ['sessionId', 'createdAt'],
+                required: ['session_id', 'user_id', 'created_at', 'revoked'],
             },
         },
     },
