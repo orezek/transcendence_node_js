@@ -44,7 +44,7 @@ async function loginUser(this: FastifyInstance, request: FastifyRequest<{Body: U
                 session_id : crypto.randomUUID(),
                 ip_address: request.ip || 'unknown',
                 user_agent: request.headers['user-agent'] || 'unknown',
-                expires_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+                expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
             }
         try {
             await this.dbSqlite('sessions').insert(newSession);

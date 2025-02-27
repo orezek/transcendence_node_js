@@ -1,4 +1,4 @@
-import type { FastifyRequest, FastifyReply } from 'fastify';
+import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 
 interface JwtPayload {
     jti: string;
@@ -6,18 +6,12 @@ interface JwtPayload {
     exp: number;
 }
 
-interface AuthResponse {
-    status: 'error';
-    message: string;
-}
-
-async function authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+async function authenticate(this: FastifyInstance, request: FastifyRequest, reply: FastifyReply): Promise<void> {
     const authHeader: string | undefined = request.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return reply.code(401).send({
-            status: 'error',
-            message: 'Missing or invalid Authorization header'
-        });
+    if (!authHeader || !authHeader.startsWith('Bearer '))
+    {
+        reply.code(401);
+        return reply.send({status: 'error', message: 'missing or invalid authorization header'});
     }
 
     const token: string = authHeader.split(' ')[1];
@@ -26,10 +20,13 @@ async function authenticate(request: FastifyRequest, reply: FastifyReply): Promi
         request.jwt_payload = decoded;
         request.session_id = decoded.jti;
     } catch (error) {
-        return reply.code(401).send({
-            status: 'error',
-            message: error instanceof Error ? error.message : 'Unauthorized'
-        });
+        if (error instanceof Error)
+        {
+            reply.code(401);
+            return reply.send({status: 'error', message: 'unauthorized'});
+        }
+        reply.code(500);
+        return reply.send({status: 'error', message: 'internal server error'});
     }
 }
 

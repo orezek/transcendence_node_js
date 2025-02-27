@@ -138,6 +138,18 @@ const LogoutUnauthorized401Response = {
     },
     required: ['status', 'message'],
 };
+// missing token or invalid token
+const LogoutUnauthorized500Response = {
+    $id: 'https://ponggame.com/schemas/api/v1/logout/response-500.json',
+    $schema: 'http://json-schema.org/draft-07/schema#',
+    title: 'LogoutUnauthorized500Response',
+    type: 'object',
+    properties: {
+        status: { type: 'string', enum: ['error'] },
+        message: { type: 'string' },
+    },
+    required: ['status', 'message'],
+};
 // Request to GET /api/user/info
 // jwt required in the headers
 // Responses:
@@ -251,6 +263,7 @@ const ListSessionsSuccess200Response = {
     type: 'object',
     properties: {
         status: { type: 'string', enum: ['success'] },
+        count: { type: 'integer' },
         message: { type: 'string' },
         data: {
             type: 'array',
@@ -367,6 +380,7 @@ export default {
     LoginServerError500Response,
     LogoutSuccess200Response,
     LogoutUnauthorized401Response,
+    LogoutUnauthorized500Response,
     UserInfoSuccess200Response,
     UserInfoUnauthorized401Response,
     RefreshTokenBodySchema,

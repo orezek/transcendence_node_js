@@ -2,9 +2,10 @@ import {FastifyInstance, FastifyPluginAsync} from 'fastify';
 import createUser from '../handlers/createUser.js'
 import loginUser from '../handlers/loginUser.js'
 import getAllSessions from '../handlers/getAllSessions.js'
+import logoutUser from '../handlers/logoutUser.js'
+import getUserInfo from '../handlers/getUserInfo.js'
+
 import {
-    logoutUser,
-    getUserInfo,
     refreshToken,
     logoutAll,
     deleteUser,
@@ -29,7 +30,6 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             // login user
             url: '/api/login',
             method: 'post',
-            // @ts-ignore
             handler: loginUser,
             schema: {
                 body: app.getSchema('https://ponggame.com/schemas/api/v1/login/body.json'),
@@ -44,12 +44,21 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             // logout user
             url: '/api/logout',
             method: 'post',
-            handler: logoutUser
+            preHandler: app.authenticate,
+            handler: logoutUser,
+            schema: {
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-401.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-500.json')
+                }
+            }
         },
         {
             // user details
             url: '/api/user/info',
             method: 'get',
+            preHandler: app.authenticate,
             handler: getUserInfo,
         },
         {
