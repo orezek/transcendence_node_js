@@ -5,11 +5,11 @@ import getAllSessions from '../handlers/getAllSessions.js'
 import logoutUser from '../handlers/logoutUser.js'
 import getUserInfo from '../handlers/getUserInfo.js'
 import deleteUser from '../handlers/deleteUser.js'
+import updateUser from '../handlers/updateUser.js'
+import refreshToken from '../handlers/refreshToken.js'
 
 import {
-    refreshToken,
-    logoutAll,
-    updateUser } from '../handlers.js'
+    logoutAll} from '../handlers.js'
 
 const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<void> => {
     const routes = [
@@ -72,12 +72,14 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             // refresh jwt token
             url: '/api/user/refresh',
             method: 'post',
+            preHandler: app.authenticate,
             handler: refreshToken,
         },
         {
             // logout all user sessions
             url: '/api/sessions/logout/all',
             method: 'delete',
+            preHandler: app.authenticate,
             handler: logoutAll,
         },
         {
@@ -111,6 +113,7 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             // update user profile data
             url: '/api/user',
             method: 'patch',
+            preHandler: app.authenticate,
             handler: updateUser
         }
     ];
