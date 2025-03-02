@@ -331,6 +331,17 @@ const UserDeleteUnauthorized401Response = {
     },
     required: ['status', 'message'],
 };
+const UserDeleteServerError500Response = {
+    $id: 'https://ponggame.com/schemas/api/v1/user/delete/response-500.json',
+    $schema: 'http://json-schema.org/draft-07/schema#',
+    title: 'UserDeleteServerError500Response',
+    type: 'object',
+    properties: {
+        status: { type: 'string', enum: ['success'] },
+        message: { type: 'string' },
+    },
+    required: ['status', 'message'],
+};
 // Request to PATCH /api/user — Update User
 // JWT in the header
 const UserPatchBodySchema = {
@@ -404,6 +415,7 @@ export default {
     ListSessionsUnauthorized401Response,
     UserDeleteSuccess200Response,
     UserDeleteUnauthorized401Response,
+    UserDeleteServerError500Response,
     UserPatchBodySchema,
     UserPatchSuccess200Response,
     UserPatchUnauthorized401Response,

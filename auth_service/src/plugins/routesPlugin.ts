@@ -99,7 +99,13 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             url: '/api/user',
             method: 'delete',
             preHandler: app.authenticate,
-            handler: deleteUser
+            handler: deleteUser,
+            schema: {
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/user/delete/response-200.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/user/delete/response-500.json')
+                }
+            }
         },
         {
             // update user profile data

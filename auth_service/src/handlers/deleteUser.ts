@@ -8,6 +8,10 @@ interface ResponseBody {
     data?:[]
 }
 
+interface UserDetails {
+    username: string
+    email: string
+}
 
 async function deleteUser(this:FastifyInstance, request: FastifyRequest, reply: FastifyReply): Promise<ResponseBody> {
     try
@@ -16,7 +20,8 @@ async function deleteUser(this:FastifyInstance, request: FastifyRequest, reply: 
         if (userId)
         {
             const deactivateSessions: number = await this.dbSqlite('sessions').where('user_id', userId.user_id).update({revoked: true});
-            const deactivateUser: number = await this.dbSqlite('users').where('id', userId.user_id).update({active: false});
+            const userDetails: UserDetails = await this.dbSqlite('users').select('username', 'email').where('id', userId.user_id).first();
+            const deactivateUser: number = await this.dbSqlite('users').where('id', userId.user_id).update({active: false, username: userDetails.username + userId.user_id, email: userDetails.email + userId.user_id});
             if (deactivateSessions && deactivateUser)
             {
                 reply.code(200);
@@ -24,7 +29,7 @@ async function deleteUser(this:FastifyInstance, request: FastifyRequest, reply: 
             }
         }
         reply.code(400);
-        return {status : 'error', message: `deactivation failed`};
+        return {status : 'error', message: `invalid deactivation`};
     }
     catch (error: unknown) {
         reply.code(500);
