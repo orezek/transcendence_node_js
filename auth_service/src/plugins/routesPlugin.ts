@@ -20,7 +20,9 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
                 body: app.getSchema('https://ponggame.com/schemas/api/v1/user/body.json'),
                 response: {
                     201: app.getSchema('https://ponggame.com/schemas/api/v1/user/response-201.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/user/response-400.json'),
                     409: app.getSchema('https://ponggame.com/schemas/api/v1/user/response-409.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/user/response-500.json'),
                 }
             }
         },
@@ -33,6 +35,7 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
                 body: app.getSchema('https://ponggame.com/schemas/api/v1/login/body.json'),
                 response: {
                     200: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-400.json'),
                     401: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-401.json'),
                     500: app.getSchema('https://ponggame.com/schemas/api/v1/login/response-500.json'),
                 }
@@ -47,7 +50,8 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             schema: {
                 response: {
                     200: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-200.json'),
-                    400: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-401.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-400.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-401.json'),
                     500: app.getSchema('https://ponggame.com/schemas/api/v1/logout/response-500.json')
                 }
             }
@@ -61,6 +65,7 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             schema: {
                 response: {
                     200: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-400.json'),
                     401: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-401.json'),
                     500: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-500.json')
                 }
@@ -72,6 +77,14 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             method: 'post',
             preHandler: app.authenticate,
             handler: refreshToken,
+            schema: {
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/user/refresh/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/user/refresh/response-400.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/user/refresh/response-401.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/user/refresh/response-500.json'),
+                }
+            }
         },
         {
             // logout all user sessions
@@ -79,6 +92,14 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             method: 'delete',
             preHandler: app.authenticate,
             handler: logoutAll,
+            schema: {
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/logoutAll/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/logoutAll/response-400.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/logoutAll/response-401.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/logoutAll/response-500.json')
+                }
+            }
         },
         {
             // list all users sessions
@@ -89,9 +110,10 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             schema: {
                 response: {
                     200: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/response-400.json'),
                     401: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/response-401.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/sessions/response-500.json')
                 }
-
             }
         },
         {
@@ -103,6 +125,8 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             schema: {
                 response: {
                     200: app.getSchema('https://ponggame.com/schemas/api/v1/user/delete/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/user/delete/response-400.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/user/delete/response-401.json'),
                     500: app.getSchema('https://ponggame.com/schemas/api/v1/user/delete/response-500.json')
                 }
             }
@@ -112,7 +136,17 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             url: '/api/user',
             method: 'patch',
             preHandler: app.authenticate,
-            handler: updateUser
+            handler: updateUser,
+            schema: {
+                body: app.getSchema('https://ponggame.com/schemas/api/v1/user/patch/body.json'),
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/user/patch/response-200.json'),
+                    400: app.getSchema('https://ponggame.com/schemas/api/v1/user/patch/response-400.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/user/patch/response-401.json'),
+                    //409:app.getSchema(duplicate records error),it might happen
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/user/patch/response-500.json')
+                }
+            }
         }
     ];
     routes.forEach(route => {
