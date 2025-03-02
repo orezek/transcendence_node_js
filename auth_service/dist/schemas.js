@@ -185,6 +185,17 @@ const UserInfoUnauthorized401Response = {
     },
     required: ['status', 'message'],
 };
+const UserInfoServerError500Response = {
+    $id: 'https://ponggame.com/schemas/api/v1/user/info/response-500.json',
+    $schema: 'http://json-schema.org/draft-07/schema#',
+    title: 'UserInfoUnauthorized500Response',
+    type: 'object',
+    properties: {
+        status: { type: 'string', enum: ['error'] },
+        message: { type: 'string' },
+    },
+    required: ['status', 'message'],
+};
 // Request to POST /api/user/refresh
 // JWT included in the header or in the body?
 // Open for discussion
@@ -383,6 +394,7 @@ export default {
     LogoutUnauthorized500Response,
     UserInfoSuccess200Response,
     UserInfoUnauthorized401Response,
+    UserInfoServerError500Response,
     RefreshTokenBodySchema,
     RefreshTokenSuccess200Response,
     RefreshTokenUnauthorized401Response,

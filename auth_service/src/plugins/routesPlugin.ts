@@ -4,11 +4,11 @@ import loginUser from '../handlers/loginUser.js'
 import getAllSessions from '../handlers/getAllSessions.js'
 import logoutUser from '../handlers/logoutUser.js'
 import getUserInfo from '../handlers/getUserInfo.js'
+import deleteUser from '../handlers/deleteUser.js'
 
 import {
     refreshToken,
     logoutAll,
-    deleteUser,
     updateUser } from '../handlers.js'
 
 const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<void> => {
@@ -60,6 +60,13 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             method: 'get',
             preHandler: app.authenticate,
             handler: getUserInfo,
+            schema: {
+                response: {
+                    200: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-200.json'),
+                    401: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-401.json'),
+                    500: app.getSchema('https://ponggame.com/schemas/api/v1/user/info/response-500.json')
+                }
+            }
         },
         {
             // refresh jwt token
@@ -91,6 +98,7 @@ const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<v
             // deactivate user
             url: '/api/user',
             method: 'delete',
+            preHandler: app.authenticate,
             handler: deleteUser
         },
         {

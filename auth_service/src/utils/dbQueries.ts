@@ -7,14 +7,3 @@ export interface UserId {
 export async function getUserId(instance:FastifyInstance, request: FastifyRequest): Promise<UserId | undefined> {
     return instance.dbSqlite('sessions').select('user_id').where({session_id: request.session_id, revoked: false}).andWhereRaw("UNIXEPOCH(expires_at) > UNIXEPOCH('now')").first();
 }
-
-
-// try
-// {
-//     return await instance.dbSqlite('sessions').select('user_id').where({session_id: request.session_id, revoked: false}).andWhereRaw("UNIXEPOCH(expires_at) > UNIXEPOCH('now')").first();
-// }
-// catch(error)
-// {
-//     throw error;
-// }
-// }
