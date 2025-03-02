@@ -7,9 +7,7 @@ import getUserInfo from '../handlers/getUserInfo.js'
 import deleteUser from '../handlers/deleteUser.js'
 import updateUser from '../handlers/updateUser.js'
 import refreshToken from '../handlers/refreshToken.js'
-
-import {
-    logoutAll} from '../handlers.js'
+import logoutAll from '../handlers/logoutAll.js'
 
 const routesPlugin: FastifyPluginAsync = async (app: FastifyInstance): Promise<void> => {
     const routes = [
